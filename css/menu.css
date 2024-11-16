@@ -1,0 +1,88 @@
+body {
+    background: url("/imagenes/fondoMenu.jpg");
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.menu-container {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    animation: popIn 1s ease-out;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.menu-button:hover {
+    background-color: #388E3C;
+}
+
+.menu-button:active {
+    transform: scale(0.95);
+}
+
+.level-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.level-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.level-button:disabled {
+    background-color: #a5d6a7;
+    cursor: not-allowed;
+}
+
+.level-button:hover:enabled {
+    background-color: #388E3C;
+}

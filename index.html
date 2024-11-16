@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivina, Adivinador</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/nickname.css">
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-150">
+        <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%; border-radius: 10px;">
+            <h1 class="text-center mb-3 font-weight-bold">¡Bienvenido a Adivina, Adivinador!</h1>
+            <p class="text-center text-muted">Por favor, ingresa tu nombre o nickname para empezar a jugar.</p>
+            <form id="nicknameForm">
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    </div>
+                    <input type="text" id="nickname" class="form-control" placeholder="Tu nickname" aria-label="Nickname">
+                </div>
+                <div id="error-message" class="text-danger mb-3" style="display: none;">El campo nickname no puede estar vacío</div>
+                <button type="button" onclick="validateNickname()" class="btn btn-success btn-block">Empezar</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validateNickname() {
+            const nicknameInput = document.getElementById("nickname");
+            const errorMessage = document.getElementById("error-message");
+
+            // Verifica si el campo está vacío o solo tiene espacios en blanco
+            if (nicknameInput.value.trim() === "") {
+                errorMessage.style.display = "block";
+            } else {
+                errorMessage.style.display = "none";
+                // Redirige a index.html
+                //localstorage guarda el nombre del jugador
+                localStorage.setItem("nickname", nicknameInput.value);
+                window.location.href = "menu.html";
+            }
+        }
+    </script>
+</body>
+</html>

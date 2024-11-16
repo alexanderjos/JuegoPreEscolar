@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Principal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="css/instrucciones.css">
+</head>
+<body>
+    <div class="menu-container">
+        <h1 class="animate__animated animate__bounce">Adivina, Adivinador</h1>
+        <div class="menu-options">
+            <button class="menu-button" onclick="startGame()">Jugar</button>
+            <button class="menu-button" onclick="showInstructions()">Instrucciones</button>
+        </div>
+    </div>
+
+    <!-- Modal de Instrucciones -->
+    <div id="instructionsModal" class="modal-container">
+        <div class="modal-content animate__animated animate__fadeIn">
+            <h3>Instrucciones del Juego</h3>
+            <p>Bienvenido al juego <strong>Adivina, Adivinador</strong>!</p>
+            <ul>
+                <li>En este juego, tendrás que adivinar un objeto, fruta o animal.</li>
+                <li>Verás una imagen representando el objeto, fruta o animal.</li>
+                <li>Debes escribir el nombre completo del objeto que aparece en la imagen en los cuadros de letras.</li>
+                <li>Si aciertas, ganarás puntos.</li>
+                <li>Si fallas, perderás vidas. Tienes un número limitado de intentos para adivinar correctamente.</li>
+                <li>Puedes usar el botón "Ayuda" para obtener pistas, que te darán indicaciones sobre el objeto que estás adivinando.</li>
+                <li>¡Suerte y diviértete!</li>
+            </ul>
+            <button class="modal-button" id="closeInstructionsButton">Cerrar Instrucciones</button>
+        </div>
+    </div>
+
+    <script>
+        // Función para empezar el juego
+        function startGame() {
+            window.location.href = "animales.html"; // Redirige al juego, puedes cambiar a "juego.html" o el archivo correspondiente
+        }
+
+      
+
+        // Función para mostrar el modal de instrucciones
+        function showInstructions() {
+            const instructionsModal = document.getElementById("instructionsModal");
+            instructionsModal.style.display = "flex"; // Muestra el modal de instrucciones usando 'flex' para centrar
+        }
+
+        // Cerrar el modal de instrucciones cuando se haga clic en "Cerrar Instrucciones"
+        document.getElementById("closeInstructionsButton").addEventListener("click", function() {
+            const instructionsModal = document.getElementById("instructionsModal");
+            instructionsModal.style.display = "none"; // Cierra el modal de instrucciones
+        });
+    </script>
+
+    
+</body>
+</html>

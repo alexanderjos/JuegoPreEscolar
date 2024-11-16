@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivina, Adivinador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="css/frutas.css">
+    <script defer src="js/Alimentos.js"></script>
+</head>
+
+<body>
+    <div class="game-container">
+        <h2>Adivina, Adivinador</h2>
+
+        <!-- Contenedor superior con vidas y puntaje -->
+        <div class="top-info">
+            <div id="lives-container" class="lives-container">
+                <!-- Los iconos de corazón se generarán dinámicamente aquí -->
+            </div>
+            <div id="score-container" class="score-container">Puntaje: 0</div>
+        </div>
+
+        <!-- Contenedor de la imagen -->
+        <div class="image-container">
+            <img id="game-image" src="imagenes/allimentos/leche.png" alt="Imagen a adivinar">
+        </div>
+
+        <!-- Contenedor de los cuadros de letras -->
+        <div class="letter-boxes" id="letter-boxes"></div>
+
+        <!-- Botón de ayuda -->
+        <button class="help-button" onclick="showHelp()">Ayuda</button>
+
+        <!-- Botón de verificación -->
+        <button class="check-button" onclick="checkAnswer()">Verificar</button>
+
+        <!-- Contenedor de mensaje, debajo de los botones -->
+        <div id="message" class="message"></div>
+
+        <!-- Modal de fin de juego (Perdiste) -->
+        <div id="gameOverModal" class="modal-container">
+            <div class="modal-content animate__animated animate__shakeX">
+                <h3>¡Perdiste!</h3>
+                <p id="finalScore">Tu puntaje fue: 0</p>
+                <i class="fa-solid fa-face-sad-tear" style="color: #FFD43B;"></i>
+                <button class="modal-button" onclick="restartGame()">Reiniciar Juego</button>
+            </div>
+        </div>
+
+      <!-- Modal de fin de juego (Ganaste) -->
+      <div id="winModal" class="modal-container">
+        <div class="modal-content animate__animated animate__bounceIn">
+            <h3>¡Ganaste!</h3>
+            <div class="stars">
+                <i class="fas fa-star animate__animated animate__heartBeat animate__delay-1s"></i>
+                <i class="fas fa-star animate__animated animate__heartBeat animate__delay-2s"></i>
+                <i class="fas fa-star animate__animated animate__heartBeat animate__delay-3s"></i>
+            </div>
+            <p id="finalScoreWin">Tu puntaje fue: 0</p>
+            <button  class="modal-button" id="winButton">Pasar a la siguiente sección</button>
+        </div>
+    </div>
+
+
+        <!-- Modal de ayuda con audio -->
+        <div id="helpModal" class="modal-container">
+            <div class="help-modal-content">
+                <h3>Pista</h3>
+                <p id="helpText">Aquí irá la pista correspondiente.</p>
+                <button class="help-modal-button" onclick="closeHelp()">Cerrar</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
