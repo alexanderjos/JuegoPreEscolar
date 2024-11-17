@@ -55,16 +55,16 @@ body {
     background: none;
 }
 
-/* Botones de ayuda y verificación */
-.help-button, .check-button {
-    padding: 10px 20px;
-    font-size: 16px;
+.help-button{
+    padding: 10px 40px;
+    font-size: 23px;
     margin: 10px;
     cursor: pointer;
     border: none;
     color: #fff;
     background-color: #4CAF50;
     border-radius: 5px;
+    font-style: italic;
     transition: background-color 0.3s;
 }
 
@@ -74,10 +74,6 @@ body {
 
 .help-button:hover {
     background-color: #1976D2;
-}
-
-.check-button:hover {
-    background-color: #388E3C;
 }
 
 /* Contenedor del mensaje de respuesta */

@@ -19,7 +19,6 @@ const wordList = [{
         hint: "Es un alimento blanco y cremoso hecho de leche."
     }
 ];
-
 // Recuperar el puntaje y las vidas desde localStorage o asignar valores predeterminados
 let currentRound = 0; // Ronda actual
 let score = parseInt(localStorage.getItem("score")) || 0; // Si no hay puntaje, empieza en 0
@@ -31,6 +30,8 @@ function generateLetterBoxes() {
     letterBoxesContainer.innerHTML = ""; // Limpiar el contenedor
 
     const word = wordList[currentRound].word;
+    const inputs = []; // Guardar una referencia a todos los inputs
+
     for (let i = 0; i < word.length; i++) {
         const box = document.createElement("div");
         box.classList.add("letter-box");
@@ -39,14 +40,37 @@ function generateLetterBoxes() {
         input.type = "text";
         input.maxLength = 1;
         input.classList.add("input-box");
-        input.oninput = () => input.value = input.value.toUpperCase(); // Convertir a mayúsculas
-        box.appendChild(input);
 
+        // Convierte el texto a mayúsculas automáticamente
+        input.oninput = () => {
+            input.value = input.value.toUpperCase();
+            checkAllInputsFilled(inputs); // Verificar si están llenos
+        };
+
+        inputs.push(input);
+        box.appendChild(input);
         letterBoxesContainer.appendChild(box);
     }
 }
 
-// Función para mostrar la pista en el modal
+// Verificar si todos los cuadros de texto están llenos
+function checkAllInputsFilled(inputs) {
+    let userAnswer = "";
+    let allFilled = true;
+
+    inputs.forEach(input => {
+        if (input.value === "") {
+            allFilled = false; // Si algún cuadro está vacío, no continuar
+        }
+        userAnswer += input.value.toUpperCase();
+    });
+
+    if (allFilled) {
+        checkAnswer(); // Llama a la función que verifica la respuesta
+    }
+}
+
+// Mostrar la pista en el modal
 function showHelp() {
     const hint = wordList[currentRound].hint;
 
@@ -57,7 +81,7 @@ function showHelp() {
     document.getElementById("helpModal").style.display = "flex";
 }
 
-// Función para cerrar el modal de ayuda
+// Cerrar el modal de ayuda
 function closeHelp() {
     // Ocultar el modal de ayuda
     document.getElementById("helpModal").style.display = "none";
@@ -94,7 +118,7 @@ function checkAnswer() {
 
     // Mostrar el mensaje y las vidas restantes
     messageElement.style.display = "block";
-    document.getElementById("score-container").innerText = `Puntaje: ${score}`;
+    updateScoreDisplay(); // Actualizar el puntaje en la interfaz
 
     // Si no hay vidas restantes, termina el juego
     if (lives <= 0) {
@@ -105,7 +129,7 @@ function checkAnswer() {
     }
 }
 
-// Función para actualizar los iconos de vidas
+// Función para actualizar las vidas en la interfaz
 function updateLives() {
     const livesContainer = document.getElementById("lives-container");
     livesContainer.innerHTML = ""; // Limpiar los iconos de vida antes de agregarlos
@@ -136,14 +160,14 @@ function nextRound() {
     }
 }
 
-// Mostrar el modal de fin de juego
+// Función para mostrar el modal de fin de juego
 function showGameOverModal() {
     const finalScoreElement = document.getElementById("finalScore");
     finalScoreElement.innerText = `Tu puntaje fue: ${score}`;
     document.getElementById("gameOverModal").style.display = "flex";
 }
 
-// Mostrar el modal de fin de juego
+// Función para mostrar el modal de victoria
 function showWinModal() {
     const finalScoreElement = document.getElementById("finalScoreWin");
     finalScoreElement.innerText = `Tu puntaje fue: ${score}`;
@@ -157,7 +181,7 @@ function showWinModal() {
     button.innerText = "Pasar a la siguiente sección";
     button.onclick = () => {
         // Redirigir a otro archivo HTML
-        window.location.href = "MediosTransporte.html"; // Cambia este nombre por el archivo de la siguiente sección
+        window.location.href = "cuerpo.html"; // Cambia este nombre por el archivo de la siguiente sección
     };
 
     document.getElementById("winModal").style.display = "flex";
@@ -165,7 +189,7 @@ function showWinModal() {
 
 // Reiniciar el juego
 function restartGame() {
-    //Destruir los localStorage
+    // Destruir los datos de localStorage
     localStorage.removeItem("score");
     localStorage.removeItem("lives");
     localStorage.removeItem("nickname");
@@ -176,16 +200,17 @@ function restartGame() {
 function updateScoreDisplay() {
     document.getElementById("score-container").innerText = `Puntaje: ${score}`;
 }
-//Verificar si hay un nickname guardado en localStorage
+
+// Verificar si hay un nickname guardado en localStorage
 function checkNickname() {
     const nickname = localStorage.getItem("nickname");
-    //Si no existe volver al login
     if (!nickname) {
-        window.location.href = "index.html";
+        window.location.href = "index.html"; // Redirige al inicio si no hay nickname
     }
 }
-checkNickname();
+
 // Inicializar el juego
+checkNickname();
 generateLetterBoxes();
 updateLives(); // Mostrar las vidas iniciales
 updateScoreDisplay(); // Mostrar el puntaje inicial

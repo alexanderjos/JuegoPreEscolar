@@ -1,26 +1,25 @@
 const wordList = [
     {
-        word: "MANZANA",
-        image: "/imagenes/frutas/manzana.png",
-        hint: "Es una fruta roja o verde que crece en los manzanos."
+        word: "OJOS",
+        image: "/imagenes/cuerpo/ojos.png",
+        hint: "Con esto ves."
     },
     {
-        word: "PLATANO",
-        image: "/imagenes/frutas/banana.png",
-        hint: "Es una fruta amarilla y alargada, rica en potasio."
+        word: "BOCA",
+        image: "/imagenes/cuerpo/boca.png",
+        hint: "Con esto comes."
     },
     {
-        word: "FRESA",
-        image: "/imagenes/frutas/fresa.png",
-        hint: "Es una fruta pequeña, roja, con semillas en su superficie."
+        word: "MANOS",
+        image: "/imagenes/cuerpo/manos.png",
+        hint: "Con esto agarras las cosas."
     },
     {
-        word: "NARANJA",
-        image: "/imagenes/frutas/naranja.png",
-        hint: "Es una fruta cítrica de color naranja, muy jugosa."
-    },
+        word: "OREJAS",
+        image: "/imagenes/cuerpo/oreja.png",
+        hint: "Con esto escuchas."
+    }
 ];
-
 // Recuperar el puntaje y las vidas desde localStorage o asignar valores predeterminados
 let currentRound = 0; // Ronda actual
 let score = parseInt(localStorage.getItem("score")) || 0; // Si no hay puntaje, empieza en 0
@@ -183,7 +182,7 @@ function showWinModal() {
     button.innerText = "Pasar a la siguiente sección";
     button.onclick = () => {
         // Redirigir a otro archivo HTML
-        window.location.href = "Alimentos.html"; // Cambia este nombre por el archivo de la siguiente sección
+        window.location.href = "figuras.html"; // Cambia este nombre por el archivo de la siguiente sección
     };
 
     document.getElementById("winModal").style.display = "flex";

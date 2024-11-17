@@ -1,24 +1,24 @@
 const wordList = [
     {
-        word: "MANZANA",
-        image: "/imagenes/frutas/manzana.png",
-        hint: "Es una fruta roja o verde que crece en los manzanos."
+        word: "AUTO",
+        image: "/imagenes/mediotransporte/carro.png",
+        hint: "Es un vehículo con ruedas que usamos para viajar por carretera."
     },
     {
-        word: "PLATANO",
-        image: "/imagenes/frutas/banana.png",
-        hint: "Es una fruta amarilla y alargada, rica en potasio."
+        word: "AVION",
+        image: "/imagenes/mediotransporte/avion.png",
+        hint: "Es un vehículo que vuela por el aire y nos lleva de un lugar a otro."
     },
     {
-        word: "FRESA",
-        image: "/imagenes/frutas/fresa.png",
-        hint: "Es una fruta pequeña, roja, con semillas en su superficie."
+        word: "BICICLETA",
+        image: "/imagenes/mediotransporte/bicicleta.png",
+        hint: "Es un medio de transporte de dos ruedas que usamos pedaleando."
     },
     {
-        word: "NARANJA",
-        image: "/imagenes/frutas/naranja.png",
-        hint: "Es una fruta cítrica de color naranja, muy jugosa."
-    },
+        word: "TREN",
+        image: "/imagenes/mediotransporte/tren.png",
+        hint: "Es un medio de transporte que viaja sobre rieles."
+    }
 ];
 
 // Recuperar el puntaje y las vidas desde localStorage o asignar valores predeterminados
@@ -32,8 +32,6 @@ function generateLetterBoxes() {
     letterBoxesContainer.innerHTML = ""; // Limpiar el contenedor
 
     const word = wordList[currentRound].word;
-    const inputs = []; // Guardar una referencia a todos los inputs
-
     for (let i = 0; i < word.length; i++) {
         const box = document.createElement("div");
         box.classList.add("letter-box");
@@ -42,51 +40,23 @@ function generateLetterBoxes() {
         input.type = "text";
         input.maxLength = 1;
         input.classList.add("input-box");
-
-        // Convierte el texto a mayúsculas automáticamente
-        input.oninput = () => {
-            input.value = input.value.toUpperCase();
-            checkAllInputsFilled(inputs); // Verificar si están llenos
-        };
-
-        inputs.push(input);
+        input.oninput = () => input.value = input.value.toUpperCase(); // Convertir a mayúsculas
         box.appendChild(input);
+
         letterBoxesContainer.appendChild(box);
     }
 }
 
-// Verificar si todos los cuadros de texto están llenos
-function checkAllInputsFilled(inputs) {
-    let userAnswer = "";
-    let allFilled = true;
-
-    inputs.forEach(input => {
-        if (input.value === "") {
-            allFilled = false; // Si algún cuadro está vacío, no continuar
-        }
-        userAnswer += input.value.toUpperCase();
-    });
-
-    if (allFilled) {
-        checkAnswer(); // Llama a la función que verifica la respuesta
-    }
-}
-
-// Mostrar la pista en el modal
+// Función para mostrar la pista en el modal
 function showHelp() {
     const hint = wordList[currentRound].hint;
-
-    // Mostrar la pista
     document.getElementById("helpText").innerText = hint;
-
-    // Mostrar el modal de ayuda
-    document.getElementById("helpModal").style.display = "flex";
+    document.getElementById("helpModal").style.display = "flex"; // Mostrar modal de ayuda
 }
 
-// Cerrar el modal de ayuda
+// Función para cerrar el modal de ayuda
 function closeHelp() {
-    // Ocultar el modal de ayuda
-    document.getElementById("helpModal").style.display = "none";
+    document.getElementById("helpModal").style.display = "none"; // Ocultar modal de ayuda
 }
 
 // Verificar la respuesta
@@ -120,7 +90,7 @@ function checkAnswer() {
 
     // Mostrar el mensaje y las vidas restantes
     messageElement.style.display = "block";
-    updateScoreDisplay(); // Actualizar el puntaje en la interfaz
+    document.getElementById("score-container").innerText = `Puntaje: ${score}`;
 
     // Si no hay vidas restantes, termina el juego
     if (lives <= 0) {
@@ -131,7 +101,7 @@ function checkAnswer() {
     }
 }
 
-// Función para actualizar las vidas en la interfaz
+// Función para actualizar los iconos de vidas
 function updateLives() {
     const livesContainer = document.getElementById("lives-container");
     livesContainer.innerHTML = ""; // Limpiar los iconos de vida antes de agregarlos
@@ -156,20 +126,20 @@ function nextRound() {
         showWinModal();
     } else {
         generateLetterBoxes();
-        document.getElementById("game-image").src = wordList[currentRound].image;
+        document.getElementById("game-image").src = wordList[currentRound].image; // Cambiar imagen del medio de transporte
         document.getElementById("message").style.display = "none"; // Ocultar el mensaje
         updateLives(); // Actualizar las vidas
     }
 }
 
-// Función para mostrar el modal de fin de juego
+// Mostrar el modal de fin de juego
 function showGameOverModal() {
     const finalScoreElement = document.getElementById("finalScore");
     finalScoreElement.innerText = `Tu puntaje fue: ${score}`;
-    document.getElementById("gameOverModal").style.display = "flex";
+    document.getElementById("gameOverModal").style.display = "flex"; // Mostrar el modal de fin de juego
 }
 
-// Función para mostrar el modal de victoria
+// Mostrar el modal de victoria
 function showWinModal() {
     const finalScoreElement = document.getElementById("finalScoreWin");
     finalScoreElement.innerText = `Tu puntaje fue: ${score}`;
@@ -178,15 +148,14 @@ function showWinModal() {
     localStorage.setItem("score", score);
     localStorage.setItem("lives", lives);
 
-    // Cambiar el botón del modal para "Pasar a la siguiente sección"
+    // Cambiar el botón del modal para "Volver a jugar"
     const button = document.getElementById("winButton");
-    button.innerText = "Pasar a la siguiente sección";
+    button.innerText = "Volver a jugar";
     button.onclick = () => {
-        // Redirigir a otro archivo HTML
-        window.location.href = "Alimentos.html"; // Cambia este nombre por el archivo de la siguiente sección
+        restartGame(); // Reiniciar el juego
     };
 
-    document.getElementById("winModal").style.display = "flex";
+    document.getElementById("winModal").style.display = "flex"; // Mostrar modal de victoria
 }
 
 // Reiniciar el juego
@@ -195,7 +164,7 @@ function restartGame() {
     localStorage.removeItem("score");
     localStorage.removeItem("lives");
     localStorage.removeItem("nickname");
-    window.location.href = "index.html"; // Redirige a la página de inicio del juego
+    window.location.href = "index.html"; // Redirigir a la página de inicio
 }
 
 // Función para actualizar el puntaje en la interfaz
@@ -207,7 +176,7 @@ function updateScoreDisplay() {
 function checkNickname() {
     const nickname = localStorage.getItem("nickname");
     if (!nickname) {
-        window.location.href = "index.html"; // Redirige al inicio si no hay nickname
+        window.location.href = "index.html"; // Redirigir al login si no hay nickname
     }
 }
 

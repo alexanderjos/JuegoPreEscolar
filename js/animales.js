@@ -1,4 +1,5 @@
-const wordList = [{
+const wordList = [
+    {
         word: "PERRO",
         image: "/imagenes/animales/perro.png",
         hint: "Es un animal doméstico que ladra.",
@@ -22,13 +23,11 @@ const wordList = [{
         hint: "Es un ave que canta por la mañana.",
         audio: "audios/gallo.mp3"
     }
-
 ];
 
 let currentRound = 0; // Ronda actual
 let score = 0; // Puntaje
 let lives = 3; // Vidas iniciales
-let audioElement = null; // Variable global para controlar el audio
 
 // Función para generar los cuadros de letras
 function generateLetterBoxes() {
@@ -36,6 +35,9 @@ function generateLetterBoxes() {
     letterBoxesContainer.innerHTML = ""; // Limpiar el contenedor
 
     const word = wordList[currentRound].word;
+
+    const inputs = []; // Array para almacenar los inputs
+
     for (let i = 0; i < word.length; i++) {
         const box = document.createElement("div");
         box.classList.add("letter-box");
@@ -44,49 +46,42 @@ function generateLetterBoxes() {
         input.type = "text";
         input.maxLength = 1;
         input.classList.add("input-box");
-        input.oninput = () => input.value = input.value.toUpperCase(); // Convertir a mayúsculas
-        box.appendChild(input);
 
+        // Cuando se escribe una letra, enfocar el siguiente input
+        input.oninput = () => {
+            input.value = input.value.toUpperCase(); // Convertir a mayúsculas
+            checkAllInputsFilled(inputs); // Verificar si están llenos
+            // Enfocar al siguiente cuadro si se escribió una letra
+            if (input.value !== "" && i < word.length - 1) {
+                inputs[i + 1].focus(); // Enfocar el siguiente cuadro
+            }
+        };
+
+        inputs.push(input);
+        box.appendChild(input);
         letterBoxesContainer.appendChild(box);
     }
 }
 
-// Función para mostrar la pista en el modal y cargar el audio correspondiente
-function showHelp() {
-    const hint = wordList[currentRound].hint;
-    const audioSrc = wordList[currentRound].audio;
-
-    // Mostrar la pista
-    document.getElementById("helpText").innerText = hint;
-
-    // Crear un nuevo elemento de audio y no reproducirlo automáticamente
-    const helpAudio = document.getElementById("helpAudio");
-    helpAudio.src = audioSrc;
-
-    // Mostrar el modal de ayuda
-    document.getElementById("helpModal").style.display = "flex";
-}
-
-// Función para cerrar el modal de ayuda
-function closeHelp() {
-    // Detener el audio al cerrar el modal
-    const helpAudio = document.getElementById("helpAudio");
-    helpAudio.pause();
-    helpAudio.currentTime = 0; // Resetear la posición del audio
-
-    // Ocultar el modal de ayuda
-    document.getElementById("helpModal").style.display = "none";
-}
-
-// Verificar la respuesta
-function checkAnswer() {
-    const inputs = document.querySelectorAll(".input-box");
+// Verificar si todos los cuadros están llenos
+function checkAllInputsFilled(inputs) {
     let userAnswer = "";
+    let allFilled = true;
 
     inputs.forEach(input => {
+        if (input.value === "") {
+            allFilled = false; // Si algún cuadro está vacío, no continuar
+        }
         userAnswer += input.value.toUpperCase();
     });
 
+    if (allFilled) {
+        evaluateAnswer(userAnswer); // Evaluar respuesta automáticamente
+    }
+}
+
+// Evaluar la respuesta
+function evaluateAnswer(userAnswer) {
     const correctAnswer = wordList[currentRound].word;
     const messageElement = document.getElementById("message");
 
@@ -97,31 +92,52 @@ function checkAnswer() {
         messageElement.classList.add("correct");
     } else {
         lives--; // Restar una vida
-        messageElement.innerText = `Incorrecto. Te quedan : ${lives} vidas`;
+        messageElement.innerText = `Incorrecto. Te quedan: ${lives} vidas`;
         messageElement.classList.remove("correct");
         messageElement.classList.add("incorrect");
 
-        // Actualizar las vidas en pantalla
-        updateLives();
+        updateLives(); // Actualizar las vidas
+
+        if (lives <= 0) {
+            showGameOverModal();
+            return; // Salir si el juego terminó
+        }
     }
 
-    // Mostrar el mensaje y las vidas restantes
+    // Mostrar el mensaje
     messageElement.style.display = "block";
     document.getElementById("score-container").innerText = `Puntaje: ${score}`;
 
-    // Si no hay vidas restantes, termina el juego
-    if (lives <= 0) {
-        showGameOverModal();
-    } else {
-        // Pasar automáticamente a la siguiente ronda después de 2 segundos
-        setTimeout(nextRound, 2000);
-    }
+    // Pasar a la siguiente ronda después de un breve retraso
+    setTimeout(nextRound, 2000);
 }
 
-// Función para actualizar los iconos de vidas
+// Mostrar la pista y reproducir audio
+function showHelp() {
+    const hint = wordList[currentRound].hint;
+    const audioSrc = wordList[currentRound].audio;
+
+    document.getElementById("helpText").innerText = hint;
+
+    const helpAudio = document.getElementById("helpAudio");
+    helpAudio.src = audioSrc;
+
+    document.getElementById("helpModal").style.display = "flex";
+}
+
+// Cerrar el modal de ayuda
+function closeHelp() {
+    const helpAudio = document.getElementById("helpAudio");
+    helpAudio.pause();
+    helpAudio.currentTime = 0; // Resetear posición del audio
+
+    document.getElementById("helpModal").style.display = "none";
+}
+
+// Actualizar las vidas en pantalla
 function updateLives() {
     const livesContainer = document.getElementById("lives-container");
-    livesContainer.innerHTML = ""; // Limpiar los iconos de vida antes de agregarlos
+    livesContainer.innerHTML = ""; // Limpiar los iconos de vida
 
     for (let i = 0; i < lives; i++) {
         const heart = document.createElement("i");
@@ -134,7 +150,7 @@ function updateLives() {
     }
 }
 
-// Avanzar a la siguiente ronda o terminar el juego
+// Avanzar a la siguiente ronda o ganar el juego
 function nextRound() {
     currentRound++;
     if (currentRound >= wordList.length) {
@@ -143,56 +159,48 @@ function nextRound() {
         generateLetterBoxes();
         document.getElementById("game-image").src = wordList[currentRound].image;
         document.getElementById("message").style.display = "none"; // Ocultar el mensaje
-        updateLives(); // Actualizar las vidas
+        updateLives(); // Actualizar vidas
     }
 }
 
 // Mostrar el modal de fin de juego
 function showGameOverModal() {
-    const finalScoreElement = document.getElementById("finalScore");
-    finalScoreElement.innerText = `Tu puntaje fue: ${score}`;
+    document.getElementById("finalScore").innerText = `Tu puntaje fue: ${score}`;
     document.getElementById("gameOverModal").style.display = "flex";
 }
 
+// Mostrar el modal de victoria
 function showWinModal() {
-    const finalScoreElement = document.getElementById("finalScoreWin");
-    finalScoreElement.innerText = `Tu puntaje fue: ${score}`;
-
-    // Guardar el puntaje y las vidas en localStorage
+    document.getElementById("finalScoreWin").innerText = `Tu puntaje fue: ${score}`;
     localStorage.setItem("score", score);
     localStorage.setItem("lives", lives);
 
-    // Cambiar el botón del modal para "Pasar a la siguiente sección"
     const button = document.getElementById("winButton");
     button.innerText = "Pasar a la siguiente sección";
     button.onclick = () => {
-        // Redirigir a otro archivo HTML
-        window.location.href = "frutas.html"; // Cambia este nombre por el archivo de la siguiente sección
+        window.location.href = "frutas.html"; // Cambiar al archivo de la siguiente sección
     };
 
     document.getElementById("winModal").style.display = "flex";
 }
 
-
 // Reiniciar el juego
 function restartGame() {
-    //Destruir los localStorage
     localStorage.removeItem("score");
     localStorage.removeItem("lives");
     localStorage.removeItem("nickname");
-    window.location.href = "index.html"; // Redirige a la página de inicio del juego
+    window.location.href = "index.html"; // Redirigir a la página de inicio
 }
 
-
-//Verificar si hay un nickname guardado en localStorage
+// Verificar si hay un nickname guardado
 function checkNickname() {
     const nickname = localStorage.getItem("nickname");
-    //Si no existe volver al login
     if (!nickname) {
         window.location.href = "index.html";
     }
 }
+
 // Inicializar el juego
 checkNickname();
 generateLetterBoxes();
-updateLives(); // Mostrar las vidas iniciales
+updateLives(); // Mostrar vidas iniciales
