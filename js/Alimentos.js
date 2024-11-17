@@ -43,7 +43,13 @@ function generateLetterBoxes() {
 
         // Convierte el texto a mayúsculas automáticamente
         input.oninput = () => {
-            input.value = input.value.toUpperCase();
+            input.value = input.value.toUpperCase(); // Asegura que la letra esté en mayúsculas
+
+            // Mover al siguiente cuadro de texto si el actual está lleno
+            if (input.value !== "" && i < word.length - 1) {
+                inputs[i + 1].focus(); // Mover el foco al siguiente input
+            }
+
             checkAllInputsFilled(inputs); // Verificar si están llenos
         };
 
