@@ -12,7 +12,8 @@ const wordList = [
     {
         word: "ROMBO",
         image: "/imagenes/figuras/rombo.png",
-        hint: "Es como un diamante brillante."
+        hint: "Es como una cometa."
+
     },
     {
         word: "RECTANGULO",
@@ -185,13 +186,13 @@ function showWinModal() {
     localStorage.setItem("lives", lives);
 
     // Cambiar el botón del modal para "Pasar a la siguiente sección"
-    const button = document.getElementById("volerJugar");
+    const button = document.getElementById("salirJuego");
     button.innerText = "Volver a jugar";
     button.onclick = () => {
         restartGame();
     };
 
-    const button2 = document.getElementById("salirJuego");
+    const button2 = document.getElementById("volerJugar");
     button2.innerText = "Salir del juego";
     button2.onclick = () => {
         volverJugar();

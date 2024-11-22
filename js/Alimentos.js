@@ -11,7 +11,7 @@ const wordList = [{
 {
     word: "PAN",
     image: "/imagenes/allimentos/pan.png",
-    hint: "Es comida que comemos en las mañanas."
+    hint: "Es lo que comemos en las mañanas."
 },
 {
     word: "QUESO",
