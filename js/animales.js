@@ -191,6 +191,13 @@ function restartGame() {
     localStorage.removeItem("nickname");
     window.location.href = "index.html"; // Redirigir a la página de inicio
 }
+// Reiniciar el juego
+function volverJugar() {
+    // Destruir los datos de localStorage
+    localStorage.removeItem("score");
+    localStorage.removeItem("lives");
+    window.location.href = "menu.html"; // Redirige a la página de inicio del juego
+}
 
 // Verificar si hay un nickname guardado
 function checkNickname() {

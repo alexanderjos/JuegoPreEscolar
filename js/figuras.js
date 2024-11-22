@@ -1,23 +1,23 @@
 const wordList = [
     {
-        word: "AUTO",
-        image: "/imagenes/mediotransporte/carro.png",
-        hint: "Es un vehículo con ruedas que usamos para viajar por carretera."
+        word: "CIRCULO",
+        image: "/imagenes/figuras/circulo.png",
+        hint: "Es como una pelota para jugar."
     },
     {
-        word: "AVION",
-        image: "/imagenes/mediotransporte/avion.png",
-        hint: "Es un vehículo que vuela por el aire y nos lleva de un lugar a otro."
+        word: "CUADRADO",
+        image: "/imagenes/figuras/cuadrado.png",
+        hint: "Es como una caja de juguetes."
     },
     {
-        word: "BICICLETA",
-        image: "/imagenes/mediotransporte/bicicleta.png",
-        hint: "Es un medio de transporte de dos ruedas que usamos pedaleando."
+        word: "ROMBO",
+        image: "/imagenes/figuras/rombo.png",
+        hint: "Es como un diamante brillante."
     },
     {
-        word: "TREN",
-        image: "/imagenes/mediotransporte/tren.png",
-        hint: "Es un medio de transporte que viaja sobre rieles."
+        word: "RECTANGULO",
+        image: "/imagenes/figuras/rectangulo.png",
+        hint: "Es como una ventana de la casa."
     }
 ];
 
@@ -32,6 +32,8 @@ function generateLetterBoxes() {
     letterBoxesContainer.innerHTML = ""; // Limpiar el contenedor
 
     const word = wordList[currentRound].word;
+    const inputs = []; // Guardar una referencia a todos los inputs
+
     for (let i = 0; i < word.length; i++) {
         const box = document.createElement("div");
         box.classList.add("letter-box");
@@ -40,23 +42,57 @@ function generateLetterBoxes() {
         input.type = "text";
         input.maxLength = 1;
         input.classList.add("input-box");
-        input.oninput = () => input.value = input.value.toUpperCase(); // Convertir a mayúsculas
-        box.appendChild(input);
 
+        // Convierte el texto a mayúsculas automáticamente
+        input.oninput = () => {
+            input.value = input.value.toUpperCase(); // Asegura que la letra esté en mayúsculas
+
+            // Mover al siguiente cuadro de texto si el actual está lleno
+            if (input.value !== "" && i < word.length - 1) {
+                inputs[i + 1].focus(); // Mover el foco al siguiente input
+            }
+
+            checkAllInputsFilled(inputs); // Verificar si están llenos
+        };
+
+        inputs.push(input);
+        box.appendChild(input);
         letterBoxesContainer.appendChild(box);
     }
 }
 
-// Función para mostrar la pista en el modal
-function showHelp() {
-    const hint = wordList[currentRound].hint;
-    document.getElementById("helpText").innerText = hint;
-    document.getElementById("helpModal").style.display = "flex"; // Mostrar modal de ayuda
+// Verificar si todos los cuadros de texto están llenos
+function checkAllInputsFilled(inputs) {
+    let userAnswer = "";
+    let allFilled = true;
+
+    inputs.forEach(input => {
+        if (input.value === "") {
+            allFilled = false; // Si algún cuadro está vacío, no continuar
+        }
+        userAnswer += input.value.toUpperCase();
+    });
+
+    if (allFilled) {
+        checkAnswer(); // Llama a la función que verifica la respuesta
+    }
 }
 
-// Función para cerrar el modal de ayuda
+// Mostrar la pista en el modal
+function showHelp() {
+    const hint = wordList[currentRound].hint;
+
+    // Mostrar la pista
+    document.getElementById("helpText").innerText = hint;
+
+    // Mostrar el modal de ayuda
+    document.getElementById("helpModal").style.display = "flex";
+}
+
+// Cerrar el modal de ayuda
 function closeHelp() {
-    document.getElementById("helpModal").style.display = "none"; // Ocultar modal de ayuda
+    // Ocultar el modal de ayuda
+    document.getElementById("helpModal").style.display = "none";
 }
 
 // Verificar la respuesta
@@ -90,7 +126,7 @@ function checkAnswer() {
 
     // Mostrar el mensaje y las vidas restantes
     messageElement.style.display = "block";
-    document.getElementById("score-container").innerText = `Puntaje: ${score}`;
+    updateScoreDisplay(); // Actualizar el puntaje en la interfaz
 
     // Si no hay vidas restantes, termina el juego
     if (lives <= 0) {
@@ -101,7 +137,7 @@ function checkAnswer() {
     }
 }
 
-// Función para actualizar los iconos de vidas
+// Función para actualizar las vidas en la interfaz
 function updateLives() {
     const livesContainer = document.getElementById("lives-container");
     livesContainer.innerHTML = ""; // Limpiar los iconos de vida antes de agregarlos
@@ -126,20 +162,20 @@ function nextRound() {
         showWinModal();
     } else {
         generateLetterBoxes();
-        document.getElementById("game-image").src = wordList[currentRound].image; // Cambiar imagen del medio de transporte
+        document.getElementById("game-image").src = wordList[currentRound].image;
         document.getElementById("message").style.display = "none"; // Ocultar el mensaje
         updateLives(); // Actualizar las vidas
     }
 }
 
-// Mostrar el modal de fin de juego
+// Función para mostrar el modal de fin de juego
 function showGameOverModal() {
     const finalScoreElement = document.getElementById("finalScore");
     finalScoreElement.innerText = `Tu puntaje fue: ${score}`;
-    document.getElementById("gameOverModal").style.display = "flex"; // Mostrar el modal de fin de juego
+    document.getElementById("gameOverModal").style.display = "flex";
 }
 
-// Mostrar el modal de victoria
+// Función para mostrar el modal de victoria
 function showWinModal() {
     const finalScoreElement = document.getElementById("finalScoreWin");
     finalScoreElement.innerText = `Tu puntaje fue: ${score}`;
@@ -148,14 +184,20 @@ function showWinModal() {
     localStorage.setItem("score", score);
     localStorage.setItem("lives", lives);
 
-    // Cambiar el botón del modal para "Volver a jugar"
-    const button = document.getElementById("winButton");
+    // Cambiar el botón del modal para "Pasar a la siguiente sección"
+    const button = document.getElementById("volerJugar");
     button.innerText = "Volver a jugar";
     button.onclick = () => {
-        restartGame(); // Reiniciar el juego
+        restartGame();
     };
 
-    document.getElementById("winModal").style.display = "flex"; // Mostrar modal de victoria
+    const button2 = document.getElementById("salirJuego");
+    button2.innerText = "Salir del juego";
+    button2.onclick = () => {
+        volverJugar();
+    };
+
+    document.getElementById("winModal").style.display = "flex";
 }
 
 // Reiniciar el juego
@@ -164,7 +206,14 @@ function restartGame() {
     localStorage.removeItem("score");
     localStorage.removeItem("lives");
     localStorage.removeItem("nickname");
-    window.location.href = "index.html"; // Redirigir a la página de inicio
+    window.location.href = "index.html"; // Redirige a la página de inicio del juego
+}
+// Reiniciar el juego
+function volverJugar() {
+    // Destruir los datos de localStorage
+    localStorage.removeItem("score");
+    localStorage.removeItem("lives");
+    window.location.href = "menu.html"; // Redirige a la página de inicio del juego
 }
 
 // Función para actualizar el puntaje en la interfaz
@@ -176,7 +225,7 @@ function updateScoreDisplay() {
 function checkNickname() {
     const nickname = localStorage.getItem("nickname");
     if (!nickname) {
-        window.location.href = "index.html"; // Redirigir al login si no hay nickname
+        window.location.href = "index.html"; // Redirige al inicio si no hay nickname
     }
 }
 

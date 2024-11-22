@@ -1,24 +1,25 @@
 const wordList = [{
-        word: "LECHE",
-        image: "/imagenes/allimentos/leche.png",
-        hint: "Es una bebida blanca y nutritiva que viene de las vacas."
-    },
-    {
-        word: "HUEVO",
-        image: "/imagenes/allimentos/huevo.png",
-        hint: "Es un alimento redondo que se obtiene de las gallinas."
-    },
-    {
-        word: "PAN",
-        image: "/imagenes/allimentos/pan.png",
-        hint: "Es un alimento hecho de harina y usado para hacer sandwiches."
-    },
-    {
-        word: "QUESO",
-        image: "/imagenes/allimentos/queso.png",
-        hint: "Es un alimento blanco y cremoso hecho de leche."
-    }
+    word: "LECHE",
+    image: "/imagenes/allimentos/leche.png",
+    hint: "Es una bebida blanca que nos da la vaca."
+},
+{
+    word: "HUEVO",
+    image: "/imagenes/allimentos/huevo.png",
+    hint: "Es redondo y lo pone la gallina."
+},
+{
+    word: "PAN",
+    image: "/imagenes/allimentos/pan.png",
+    hint: "Es comida que comemos en las mañanas."
+},
+{
+    word: "QUESO",
+    image: "/imagenes/allimentos/queso.png",
+    hint: "Es blanco y lo comemos con pan."
+}
 ];
+
 // Recuperar el puntaje y las vidas desde localStorage o asignar valores predeterminados
 let currentRound = 0; // Ronda actual
 let score = parseInt(localStorage.getItem("score")) || 0; // Si no hay puntaje, empieza en 0
@@ -200,6 +201,13 @@ function restartGame() {
     localStorage.removeItem("lives");
     localStorage.removeItem("nickname");
     window.location.href = "index.html"; // Redirige a la página de inicio del juego
+}
+// Reiniciar el juego
+function volverJugar() {
+    // Destruir los datos de localStorage
+    localStorage.removeItem("score");
+    localStorage.removeItem("lives");
+    window.location.href = "menu.html"; // Redirige a la página de inicio del juego
 }
 
 // Función para actualizar el puntaje en la interfaz

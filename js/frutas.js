@@ -2,22 +2,22 @@ const wordList = [
     {
         word: "MANZANA",
         image: "/imagenes/frutas/manzana.png",
-        hint: "Es una fruta roja o verde que crece en los manzanos."
+        hint: "Es una fruta roja o verde."
     },
     {
         word: "PLATANO",
         image: "/imagenes/frutas/banana.png",
-        hint: "Es una fruta amarilla y alargada, rica en potasio."
+        hint: "Es una fruta amarilla y alargada."
     },
     {
         word: "FRESA",
         image: "/imagenes/frutas/fresa.png",
-        hint: "Es una fruta pequeña, roja, con semillas en su superficie."
+        hint: "Es pequeña y roja. Tiene puntitos."
     },
     {
         word: "NARANJA",
         image: "/imagenes/frutas/naranja.png",
-        hint: "Es una fruta cítrica de color naranja, muy jugosa."
+        hint: "Es una fruta de color naranja, muy jugosa."
     },
 ];
 
@@ -202,6 +202,13 @@ function restartGame() {
     localStorage.removeItem("lives");
     localStorage.removeItem("nickname");
     window.location.href = "index.html"; // Redirige a la página de inicio del juego
+}
+// Reiniciar el juego
+function volverJugar() {
+    // Destruir los datos de localStorage
+    localStorage.removeItem("score");
+    localStorage.removeItem("lives");
+    window.location.href = "menu.html"; // Redirige a la página de inicio del juego
 }
 
 // Función para actualizar el puntaje en la interfaz

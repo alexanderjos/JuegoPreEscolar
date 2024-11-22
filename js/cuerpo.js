@@ -203,6 +203,14 @@ function restartGame() {
     window.location.href = "index.html"; // Redirige a la página de inicio del juego
 }
 
+// Reiniciar el juego
+function volverJugar() {
+    // Destruir los datos de localStorage
+    localStorage.removeItem("score");
+    localStorage.removeItem("lives");
+    window.location.href = "menu.html"; // Redirige a la página de inicio del juego
+}
+
 // Función para actualizar el puntaje en la interfaz
 function updateScoreDisplay() {
     document.getElementById("score-container").innerText = `Puntaje: ${score}`;

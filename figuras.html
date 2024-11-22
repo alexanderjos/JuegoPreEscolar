@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!-- Animate.css -->
     <link rel="stylesheet" href="css/frutas.css">
-    <script defer src="js/MediosTransporte.js"></script>
+    <script defer src="js/figuras.js"></script>
 </head>
 
 <body>
@@ -27,7 +27,7 @@
 
         <!-- Contenedor de la imagen -->
         <div class="image-container">
-            <img id="game-image" src="imagenes/mediotransporte/carro.png" alt="Imagen a adivinar">
+            <img id="game-image" src="imagenes/figuras/circulo.png" alt="Imagen a adivinar">
         </div>
 
         <!-- Contenedor de los cuadros de letras -->
@@ -45,7 +45,9 @@
                 <h3>¡Perdiste!</h3>
                 <p id="finalScore">Tu puntaje fue: 0</p>
                 <i class="fa-solid fa-face-sad-tear" style="color: #FFD43B;"></i>
-                <button class="modal-button" onclick="restartGame()">Reiniciar Juego</button>
+                <button class="modal-button" onclick="restartGame()">Salir del Juego</button>
+                <button class="modal-button" onclick="volverJugar()">Volver a Jugar</button>
+
             </div>
         </div>
 
@@ -59,7 +61,8 @@
                     <i class="fas fa-star animate__animated animate__heartBeat animate__delay-3s"></i>
                 </div>
                 <p id="finalScoreWin">Tu puntaje fue: 0</p>
-                <button class="modal-button" id="winButton">Pasar a la siguiente sección</button>
+                <button class="modal-button" id="volerJugar">Volver a jugar</button>
+                <button class="modal-button" id="salirJuego">Salir del juego</button>
             </div>
         </div>
 
