@@ -20,6 +20,7 @@ const wordList = [
         hint: "Con esto escuchas."
     }
 ];
+
 // Recuperar el puntaje y las vidas desde localStorage o asignar valores predeterminados
 let currentRound = 0; // Ronda actual
 let score = parseInt(localStorage.getItem("score")) || 0; // Si no hay puntaje, empieza en 0
@@ -54,6 +55,17 @@ function generateLetterBoxes() {
             checkAllInputsFilled(inputs); // Verificar si están llenos
         };
 
+        // Detectar Backspace
+        input.onkeydown = (event) => {
+            if (event.key === "Backspace" && input.value === "") {
+                // Si la tecla presionada es "Backspace" y el cuadro está vacío,
+                // mover el foco al cuadro anterior
+                if (i > 0) {
+                    inputs[i - 1].focus(); // Mover el foco al cuadro anterior
+                }
+            }
+        };
+
         inputs.push(input);
         box.appendChild(input);
         letterBoxesContainer.appendChild(box);
@@ -73,36 +85,12 @@ function checkAllInputsFilled(inputs) {
     });
 
     if (allFilled) {
-        checkAnswer(); // Llama a la función que verifica la respuesta
+        checkAnswer(userAnswer); // Llama a la función que verifica la respuesta
     }
 }
 
-// Mostrar la pista en el modal
-function showHelp() {
-    const hint = wordList[currentRound].hint;
-
-    // Mostrar la pista
-    document.getElementById("helpText").innerText = hint;
-
-    // Mostrar el modal de ayuda
-    document.getElementById("helpModal").style.display = "flex";
-}
-
-// Cerrar el modal de ayuda
-function closeHelp() {
-    // Ocultar el modal de ayuda
-    document.getElementById("helpModal").style.display = "none";
-}
-
 // Verificar la respuesta
-function checkAnswer() {
-    const inputs = document.querySelectorAll(".input-box");
-    let userAnswer = "";
-
-    inputs.forEach(input => {
-        userAnswer += input.value.toUpperCase();
-    });
-
+function checkAnswer(userAnswer) {
     const correctAnswer = wordList[currentRound].word;
     const messageElement = document.getElementById("message");
 
@@ -115,7 +103,7 @@ function checkAnswer() {
     } else {
         lives--; // Restar una vida
         localStorage.setItem("lives", lives); // Guardar las vidas en localStorage
-        messageElement.innerText = `Incorrecto. Te quedan : ${lives} vidas`;
+        messageElement.innerText = `Incorrecto. Te quedan: ${lives} vidas`;
         messageElement.classList.remove("correct");
         messageElement.classList.add("incorrect");
 

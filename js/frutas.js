@@ -55,13 +55,22 @@ function generateLetterBoxes() {
             checkAllInputsFilled(inputs); // Verificar si están llenos
         };
 
+        // Permitir que el enfoque se mueva al anterior cuando se borra una letra
+        input.onkeydown = (e) => {
+            if (e.key === "Backspace" && input.value === "") {
+                if (i > 0) {
+                    inputs[i - 1].focus(); // Mover el foco al input anterior
+                }
+            }
+        };
+
         inputs.push(input);
         box.appendChild(input);
         letterBoxesContainer.appendChild(box);
     }
 }
 
-// Verificar si todos los cuadros de texto están llenos
+// Función para verificar si todos los cuadros de texto están llenos
 function checkAllInputsFilled(inputs) {
     let userAnswer = "";
     let allFilled = true;
@@ -116,7 +125,7 @@ function checkAnswer() {
     } else {
         lives--; // Restar una vida
         localStorage.setItem("lives", lives); // Guardar las vidas en localStorage
-        messageElement.innerText = `Incorrecto. Te quedan : ${lives} vidas`;
+        messageElement.innerText = `Incorrecto. Te quedan: ${lives} vidas`;
         messageElement.classList.remove("correct");
         messageElement.classList.add("incorrect");
 
@@ -203,6 +212,7 @@ function restartGame() {
     localStorage.removeItem("nickname");
     window.location.href = "index.html"; // Redirige a la página de inicio del juego
 }
+
 // Reiniciar el juego
 function volverJugar() {
     // Destruir los datos de localStorage

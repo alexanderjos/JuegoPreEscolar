@@ -2,25 +2,21 @@ const wordList = [
     {
         word: "PERRO",
         image: "/imagenes/animales/perro.png",
-        hint: "Es un animal doméstico que ladra.",
         audio: "audios/perro.mp3"
     },
     {
         word: "GATO",
         image: "/imagenes/animales/gato.png",
-        hint: "Es un animal doméstico que maúlla.",
         audio: "audios/gato.mp3"
     },
     {
         word: "ELEFANTE",
         image: "/imagenes/animales/elefante.png",
-        hint: "Es un animal muy grande con orejas grandes.",
         audio: "audios/elefante.mp3"
     },
     {
         word: "GALLO",
         image: "/imagenes/animales/gallo.png",
-        hint: "Es un ave que canta por la mañana.",
         audio: "audios/gallo.mp3"
     }
 ];
@@ -32,10 +28,9 @@ let lives = 3; // Vidas iniciales
 // Función para generar los cuadros de letras
 function generateLetterBoxes() {
     const letterBoxesContainer = document.getElementById("letter-boxes");
-    letterBoxesContainer.innerHTML = ""; // Limpiar el contenedor
+    letterBoxesContainer.innerHTML = ""; // Limpiar el contenedor de cuadros de letras
 
     const word = wordList[currentRound].word;
-
     const inputs = []; // Array para almacenar los inputs
 
     for (let i = 0; i < word.length; i++) {
@@ -54,6 +49,17 @@ function generateLetterBoxes() {
             // Enfocar al siguiente cuadro si se escribió una letra
             if (input.value !== "" && i < word.length - 1) {
                 inputs[i + 1].focus(); // Enfocar el siguiente cuadro
+            }
+        };
+
+        // Detectar si el jugador presiona la tecla de retroceso (backspace)
+        input.onkeydown = (event) => {
+            if (event.key === "Backspace" && input.value === "") {
+                // Si la tecla presionada es "Backspace" y el cuadro está vacío,
+                // mover el foco al cuadro anterior
+                if (i > 0) {
+                    inputs[i - 1].focus();
+                }
             }
         };
 
@@ -90,6 +96,13 @@ function evaluateAnswer(userAnswer) {
         messageElement.innerText = "¡Correcto! Has adivinado la palabra.";
         messageElement.classList.remove("incorrect");
         messageElement.classList.add("correct");
+
+        // Mostrar el mensaje
+        messageElement.style.display = "block";
+        document.getElementById("score-container").innerText = `Puntaje: ${score}`;
+
+        // Pasar a la siguiente ronda después de un breve retraso
+        setTimeout(nextRound, 2000);
     } else {
         lives--; // Restar una vida
         messageElement.innerText = `Incorrecto. Te quedan: ${lives} vidas`;
@@ -98,26 +111,38 @@ function evaluateAnswer(userAnswer) {
 
         updateLives(); // Actualizar las vidas
 
+        // Si ya no hay vidas, mostrar el modal de fin de juego
         if (lives <= 0) {
             showGameOverModal();
             return; // Salir si el juego terminó
         }
+
+        // Mostrar el mensaje
+        messageElement.style.display = "block";
+        // No avanzar a la siguiente ronda, mantener la misma palabra e imagen
+        setTimeout(() => {
+            messageElement.style.display = "none";
+            generateLetterBoxes(); // Limpiar y regenerar los cuadros de letras para intentar de nuevo
+        }, 1500); // Ocultar el mensaje después de un tiempo
     }
+}
 
-    // Mostrar el mensaje
-    messageElement.style.display = "block";
-    document.getElementById("score-container").innerText = `Puntaje: ${score}`;
-
-    // Pasar a la siguiente ronda después de un breve retraso
-    setTimeout(nextRound, 2000);
+// Avanzar a la siguiente ronda o ganar el juego
+function nextRound() {
+    currentRound++;
+    if (currentRound >= wordList.length) {
+        showWinModal();
+    } else {
+        generateLetterBoxes(); // Regenera los cuadros de letras
+        document.getElementById("game-image").src = wordList[currentRound].image;
+        document.getElementById("message").style.display = "none"; // Ocultar el mensaje
+        updateLives(); // Actualizar vidas
+    }
 }
 
 // Mostrar la pista y reproducir audio
 function showHelp() {
-    const hint = wordList[currentRound].hint;
     const audioSrc = wordList[currentRound].audio;
-
-    document.getElementById("helpText").innerText = hint;
 
     const helpAudio = document.getElementById("helpAudio");
     helpAudio.src = audioSrc;
@@ -150,19 +175,6 @@ function updateLives() {
     }
 }
 
-// Avanzar a la siguiente ronda o ganar el juego
-function nextRound() {
-    currentRound++;
-    if (currentRound >= wordList.length) {
-        showWinModal();
-    } else {
-        generateLetterBoxes();
-        document.getElementById("game-image").src = wordList[currentRound].image;
-        document.getElementById("message").style.display = "none"; // Ocultar el mensaje
-        updateLives(); // Actualizar vidas
-    }
-}
-
 // Mostrar el modal de fin de juego
 function showGameOverModal() {
     document.getElementById("finalScore").innerText = `Tu puntaje fue: ${score}`;
@@ -191,7 +203,8 @@ function restartGame() {
     localStorage.removeItem("nickname");
     window.location.href = "index.html"; // Redirigir a la página de inicio
 }
-// Reiniciar el juego
+
+// Reiniciar el juego desde el menú
 function volverJugar() {
     // Destruir los datos de localStorage
     localStorage.removeItem("score");

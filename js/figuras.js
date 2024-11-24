@@ -13,7 +13,6 @@ const wordList = [
         word: "ROMBO",
         image: "/imagenes/figuras/rombo.png",
         hint: "Es como una cometa."
-
     },
     {
         word: "RECTANGULO",
@@ -53,7 +52,21 @@ function generateLetterBoxes() {
                 inputs[i + 1].focus(); // Mover el foco al siguiente input
             }
 
+            // Mover al cuadro anterior si el usuario borra la letra
+            if (input.value === "" && i > 0) {
+                inputs[i - 1].focus(); // Mover el foco al input anterior
+            }
+
             checkAllInputsFilled(inputs); // Verificar si están llenos
+        };
+
+        // Permitir que el enfoque se mueva al anterior cuando se borra
+        input.onkeydown = (e) => {
+            if (e.key === "Backspace" && input.value === "") {
+                if (i > 0) {
+                    inputs[i - 1].focus(); // Mover el foco al input anterior
+                }
+            }
         };
 
         inputs.push(input);
@@ -117,7 +130,7 @@ function checkAnswer() {
     } else {
         lives--; // Restar una vida
         localStorage.setItem("lives", lives); // Guardar las vidas en localStorage
-        messageElement.innerText = `Incorrecto. Te quedan : ${lives} vidas`;
+        messageElement.innerText = `Incorrecto. Te quedan: ${lives} vidas`;
         messageElement.classList.remove("correct");
         messageElement.classList.add("incorrect");
 
@@ -185,17 +198,17 @@ function showWinModal() {
     localStorage.setItem("score", score);
     localStorage.setItem("lives", lives);
 
-    // Cambiar el botón del modal para "Pasar a la siguiente sección"
-    const button = document.getElementById("salirJuego");
+    // Cambiar el botón del modal para "Volver a jugar"
+    const button = document.getElementById("volerJugar");
     button.innerText = "Volver a jugar";
     button.onclick = () => {
-        restartGame();
+        volverJugar();volverJugar
     };
 
-    const button2 = document.getElementById("volerJugar");
+    const button2 = document.getElementById("salirJuego");
     button2.innerText = "Salir del juego";
     button2.onclick = () => {
-        volverJugar();
+        restartGame();
     };
 
     document.getElementById("winModal").style.display = "flex";
@@ -209,6 +222,7 @@ function restartGame() {
     localStorage.removeItem("nickname");
     window.location.href = "index.html"; // Redirige a la página de inicio del juego
 }
+
 // Reiniciar el juego
 function volverJugar() {
     // Destruir los datos de localStorage
