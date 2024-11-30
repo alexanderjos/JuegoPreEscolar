@@ -16,6 +16,7 @@
 <body>
     <div class="game-container">
         <h2>Adivina, Adivinador</h2>
+        <audio id="background-music" src="audios/fondo.mp3" autoplay loop></audio>
 
         <!-- Contenedor superior con vidas y puntaje -->
         <div class="top-info">
@@ -77,6 +78,13 @@
         </div>
 
     </div>
+    <script>
+        // Reproducir música de fondo
+        const backgroundMusic = document.getElementById("background-music");
+       backgroundMusic.volume = 0.3; // Establece el volumen al 20%
+
+       backgroundMusic.play();
+   </script>
 </body>
 
 </html>

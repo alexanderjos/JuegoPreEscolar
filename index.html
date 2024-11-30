@@ -24,6 +24,7 @@
             </form>
         </div>
     </div>
+    <audio id="background-music" src="audios/fondo.mp3" loop></audio>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -37,9 +38,12 @@
                 errorMessage.style.display = "block";
             } else {
                 errorMessage.style.display = "none";
-                // Redirige a index.html
-                //localstorage guarda el nombre del jugador
+                // Guarda el nombre del jugador en localStorage
                 localStorage.setItem("nickname", nicknameInput.value);
+                // Reproduce la música de fondo
+                const backgroundMusic = document.getElementById("background-music");
+                backgroundMusic.play();
+                // Redirige a menu.html
                 window.location.href = "menu.html";
             }
         }
